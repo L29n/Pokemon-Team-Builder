@@ -1,0 +1,1 @@
+A directory to store database related content
