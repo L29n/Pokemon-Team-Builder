@@ -1,0 +1,8 @@
+- Use Jira to organize and track responsibilities
+- Use Docker to containerize the application
+- Implement CI/CD Pipelines to continuously test recent changes / pushes to the repository
+- Use JWT to authenticate users
+- Create encryption service for user PWs
+- Use MySQL to keep track of user information, their collections, and created teams
+- Fetch from pokeapi.co for information about different Pokemon, which the site gives as JSON objects
+- Flesh out a simple frontend / can do more design later
