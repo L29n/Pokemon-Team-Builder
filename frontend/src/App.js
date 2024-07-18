@@ -7,7 +7,7 @@ class App extends React.Component {
     return(
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Home name="John"/>}/>
+                <Route path="/" element={<Home name="pikachu"/>}/>
             </Routes>
         </BrowserRouter>
     );
