@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 class Home extends React.Component {
 
@@ -32,9 +32,9 @@ class Home extends React.Component {
                 <button
                     onClick={() => this.fetchPokemon()}
                 >
-                    hello
+                    {this.props.name}
                 </button>
-                {this.state.sprite && <img src={this.state.sprite} alt="Pokemon Sprite" />}
+                {this.state.sprite && <img src={this.state.sprite} alt="Pokemon Sprite"/>}
             </div>
         );
     }
