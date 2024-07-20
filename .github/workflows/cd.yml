@@ -7,7 +7,7 @@ on:
 jobs:
   push_to_registry:
     name: Deploying Docker Image to Container
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Pull Latest Code From Github Repo
         uses: actions/checkout@v3
