@@ -3,13 +3,19 @@ name: Continuous Deployment
 on:
   push:
     branches:
-    - "Mike's-Frontend"
+      - "Mike's-Frontend"
 jobs:
   push_to_registry:
-    name: Deploying Docker Image to Container
+    name: Deploying Docker Image to Container Registry
     runs-on: ubuntu-latest
     steps:
       - name: Pull Latest Code From Github Repo
         uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: actions/login-to-action@v2
+        with:
+          username: ${{ secrets.MIKES_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
     
