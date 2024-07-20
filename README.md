@@ -4,7 +4,7 @@ A site for users to look up specific Pokemon and add them to their collection an
 **Tools:** MySQL  
 **Languages:** Java, JavaScript  
 **Frameworks:** Springboot  
-**ER Diagram**  
+**ER Diagram:**  
 ![Screenshot 2024-07-20 152353](https://github.com/user-attachments/assets/33110788-8aa6-45cf-8ec0-c2e3855db55a)  
 
 **Jira Agile Workflow:**
