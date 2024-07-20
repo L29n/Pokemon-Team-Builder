@@ -1,0 +1,14 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branch: ['Mike's-Frontend']
+job:
+  push_to_registry:
+    name: Deploying Docker Image to Container
+    run-on: ubuntu-latest
+    steps:
+      - name: Pull Latest Code From Github Repo
+        use: actions/checkout@v3
+
+    
