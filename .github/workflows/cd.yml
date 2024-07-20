@@ -4,7 +4,7 @@ on:
   push:
     branches:
     - "Mike's-Frontend"
-job:
+jobs:
   push_to_registry:
     name: Deploying Docker Image to Container
     run-on: ubuntu-latest
