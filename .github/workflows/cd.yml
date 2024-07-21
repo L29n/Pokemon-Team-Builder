@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # resource: https://github.com/actions/checkout 
+      # Good to do after any file mutations to make sure the docker build is using the most up-to-date version of repo
       - name: Pull Latest Code From Github Repo
         uses: actions/checkout@v4
 
@@ -22,12 +23,32 @@ jobs:
           username: ${{ secrets.MIKES_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
       # resource: https://github.com/docker/build-push-action 
-      - name: Build and push
+
+      # Build Frontend docker image
+      - name: Build Frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: false
+          tags: mylee2002/pokemon-tb:latest
+      # # Build Backend docker image
+      # - name: Build Backend 
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ./backend
+      #     push: false
+      #     tags: mylee2002/pokemon-tb:latest
+      # Push Frontend image
+      - name: Push Frontend Image
         uses: docker/build-push-action@v6
         with:
           context: ./frontend
           push: true
           tags: mylee2002/pokemon-tb:latest
-
-
-    
+      # # Push Backend image
+      # - name: Push Backend Image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ./backend
+      #     push: true
+      #     tags: mylee2002/pokemon-tb:latest
