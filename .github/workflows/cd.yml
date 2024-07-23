@@ -30,28 +30,25 @@ jobs:
         with:
           context: ./frontend
           push: false
-          tags: mylee2002/pokemon-tb:latest
-          outputs: type=docker, dest=/tmp/frontend-image.tar
+          tags: mylee2002/pokemon-tb:frontend-latest
       # # Build Backend docker image
       # - name: Build Backend 
       #   uses: docker/build-push-action@v6
       #   with:
       #     context: ./backend
       #     push: false
-      #     tags: mylee2002/pokemon-tb:latest
+      #     tags: mylee2002/pokemon-tb:backend-latest
       # Push Frontend image
       - name: Push Frontend Image
         uses: docker/build-push-action@v6
         with:
           context: ./frontend
           push: true
-          tags: mylee2002/pokemon-tb:latest
-          load: true
-          inputs: /tmp/frontend-image.tar
+          tags: mylee2002/pokemon-tb:frontend-latest
       # # Push Backend image
       # - name: Push Backend Image
       #   uses: docker/build-push-action@v6
       #   with:
       #     context: ./backend
       #     push: true
-      #     tags: mylee2002/pokemon-tb:latest
+      #     tags: mylee2002/pokemon-tb:backend-latest
