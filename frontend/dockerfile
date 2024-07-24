@@ -1,0 +1,14 @@
+#Determine base image(for node.js project)
+FROM node:20-alpine 
+#Set working directory for project
+WORKDIR /app/pokemonTB
+#Copy dependencies into current working directory
+COPY package.json package-lock.json ./
+#Run installation of dependencies
+RUN npm install
+#Copy all the files
+COPY . ./
+#Open a port
+EXPOSE 3000
+#Command to run program
+CMD ["npm", "start"]
