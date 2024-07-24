@@ -34,27 +34,23 @@ jobs:
           tags: mylee2002/pokemon-tb:frontend-latest
           load: true
 
-      # Build Backend docker image
-#      - name: Build Backend
-#        uses: docker/build-push-action@v6
-#        with:
-#          context: ./backend
-#          push: false
-#          tags: mylee2002/pokemon-tb:backend-latest
-#      # Push Frontend image
-#
+#       Build Backend docker image
+      - name: Build Backend
+        id: build-backend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: false
+          tags: mylee2002/pokemon-tb:backend-latest
+          load: true
+
+      # Push Frontend image
+
       - name: Push Frontend Image
         if: steps.build-frontend.outcome == 'success'
         run: docker push mylee2002/pokemon-tb:frontend-latest
-        uses: docker/build-push-action@v6
-        with:
-          context: ./frontend
-          push: true
-          tags: mylee2002/pokemon-tb:frontend-latest
-#      # Push Backend image
-#      - name: Push Backend Image
-#        uses: docker/build-push-action@v6
-#        with:
-#          context: ./backend
-#          push: true
-#          tags: mylee2002/pokemon-tb:backend-latest
+
+      # Push Backend image
+      - name: Push Backend Image
+        if: steps.build-backend.outcome == 'success'
+        run: docker push mylee2002/pokemon-tb:backend-latest
