@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - "Mike's-Frontend"
+      - "Jim's-Full"
+      - "main"
 jobs:
   push_to_registry:
     name: Deploying Docker Image to Container Registry
