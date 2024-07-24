@@ -1,0 +1,60 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - "Mike's-Frontend"
+jobs:
+  push_to_registry:
+    name: Deploying Docker Image to Container Registry
+    runs-on: ubuntu-latest
+    steps:
+      # resource: https://github.com/actions/checkout
+      # Good to do after any file mutations to make sure the docker build is using the most up-to-date version of repo
+      - name: Pull Latest Code From Github Repo
+        uses: actions/checkout@v4
+
+      - name: Set up Buildx environment
+        uses: docker/setup-buildx-action@v3
+      # resource: https://github.com/docker/login-action?tab=readme-ov-file
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.MIKES_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      # resource: https://github.com/docker/build-push-action
+
+      # Build Frontend docker image
+      - name: Build Frontend Image
+        id: build-frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: false
+          tags: mylee2002/pokemon-tb:frontend-latest
+          load: true
+
+      # Build Backend docker image
+      - name: Build Backend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: false
+          tags: mylee2002/pokemon-tb:backend-latest
+      # Push Frontend image
+
+      - name: Push Frontend Image
+        if: steps.build-frontend.outcome == 'success'
+        run: docker push mylee2002/pokemon-tb:frontend-latest
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: true
+          tags: mylee2002/pokemon-tb:frontend-latest
+      # Push Backend image
+      - name: Push Backend Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: true
+          tags: mylee2002/pokemon-tb:backend-latest
