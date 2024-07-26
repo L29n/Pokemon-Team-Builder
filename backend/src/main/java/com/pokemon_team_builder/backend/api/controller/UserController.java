@@ -3,6 +3,7 @@ package com.pokemon_team_builder.backend.api.controller;
 import com.pokemon_team_builder.backend.api.model.LoginBody;
 import com.pokemon_team_builder.backend.api.model.LoginResponse;
 import com.pokemon_team_builder.backend.api.model.RegistrationBody;
+import com.pokemon_team_builder.backend.api.model.RegistrationResponse;
 import com.pokemon_team_builder.backend.exception.UserAlreadyExistsException;
 import com.pokemon_team_builder.backend.model.LocalUser;
 import com.pokemon_team_builder.backend.service.UserService;
@@ -24,10 +25,12 @@ public class UserController {
     }
 
     @PostMapping("/post/register")
-    ResponseEntity<String> registerUser(@Valid @RequestBody RegistrationBody registrationBody) {
+    ResponseEntity<RegistrationResponse> registerUser(@Valid @RequestBody RegistrationBody registrationBody) {
         try {
             userService.registerUser(registrationBody);
-            return ResponseEntity.ok().build();
+            RegistrationResponse registrationResponse = new RegistrationResponse();
+            registrationResponse.setResponse("Registration success!");
+            return ResponseEntity.ok(registrationResponse);
         } catch (UserAlreadyExistsException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
