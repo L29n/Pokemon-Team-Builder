@@ -15,14 +15,20 @@ class LoginPage extends React.Component {
 
 
     collectUserInfo = async () => {
-        this.state.username = document.getElementById("username").value;
-        this.state.password = document.getElementById("password").value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
 
-        console.log(this.state.username);
-        console.log(this.state.password);
+        this.setState({
+            username: username,
+            password: password
+        }, async () => {
+            // This callback function runs after the state has been updated
+            console.log(this.state.username);
+            console.log(this.state.password);
 
-        const login_status_json = await this.requests.login_request(this.state.username, this.state.password);
-        console.log(login_status_json);
+            const login_status_json = await this.requests.login_request(this.state.username, this.state.password);
+            console.log(login_status_json);
+        });
 
     }
 
