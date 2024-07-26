@@ -26,6 +26,28 @@ class Requests {
         }
     }
 
+    // Register Post
+    async register_request(username, password, email) {
+        try {
+            const response = await fetch('http://localhost:8080/api/post/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password, email }),
+            });
+            if(!response.ok) {
+                throw new Error(`HTTP error. Status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data;
+        }
+        catch(error) {
+            console.error(error);
+            return { success: false, error: error.message };
+        }
+    }
+
 
 }
 
