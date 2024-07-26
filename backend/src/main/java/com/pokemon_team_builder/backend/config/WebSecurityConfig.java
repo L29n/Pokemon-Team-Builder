@@ -1,4 +1,4 @@
-package com.pokemon_team_builder.backend.security;
+package com.pokemon_team_builder.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,8 +34,6 @@ public class WebSecurityConfig {
         return source;
     }
 }
-
-
 
 
 

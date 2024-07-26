@@ -1,8 +1,8 @@
-package com.pokemon_team_builder.backend.security;
+package com.pokemon_team_builder.backend.config;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.pokemon_team_builder.backend.model.LocalUser;
-import com.pokemon_team_builder.backend.model.dao.LocalUserDAO;
+import com.pokemon_team_builder.backend.model.repository.LocalUserRepository;
 import com.pokemon_team_builder.backend.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,11 +22,11 @@ import java.util.Optional;
 public class JWTRequestFilter extends OncePerRequestFilter {
 
     private JWTService jwtService;
-    private LocalUserDAO localUserDAO;
+    private LocalUserRepository localUserRepository;
 
-    public JWTRequestFilter(JWTService jwtService, LocalUserDAO localUserDAO){
+    public JWTRequestFilter(JWTService jwtService, LocalUserRepository localUserRepository){
         this.jwtService = jwtService;
-        this.localUserDAO = localUserDAO;
+        this.localUserRepository = localUserRepository;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
             String token = tokenHeader.substring(7);
             try {
                 String username = jwtService.getUsername(token);
-                Optional<LocalUser> opUser = localUserDAO.findByUsernameIgnoreCase(username);
+                Optional<LocalUser> opUser = localUserRepository.findByUsernameIgnoreCase(username);
                 if(opUser.isPresent()){
                     LocalUser user = opUser.get();
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, new ArrayList());

@@ -10,6 +10,7 @@ import lombok.Setter;
 @Table(name = "pokemon_collection")
 @IdClass(PokemonCollectionId.class)
 public class PokemonCollection {
+
     @Id
     @ManyToOne(optional = false)
     @JoinColumn(name = "local_user_id", nullable = false, unique = true)

@@ -4,26 +4,26 @@ import com.pokemon_team_builder.backend.api.model.LoginBody;
 import com.pokemon_team_builder.backend.api.model.LoginResponse;
 import com.pokemon_team_builder.backend.api.model.RegistrationBody;
 import com.pokemon_team_builder.backend.exception.UserAlreadyExistsException;
+import com.pokemon_team_builder.backend.model.LocalUser;
 import com.pokemon_team_builder.backend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@RequestMapping("/auth")
-public class AuthenticationController {
+@RequestMapping("/api")
+public class UserController {
 
     private UserService userService;
 
-    public AuthenticationController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/post/register")
     ResponseEntity<String> registerUser(@Valid @RequestBody RegistrationBody registrationBody) {
         try {
             userService.registerUser(registrationBody);
@@ -33,7 +33,7 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping("/post/login")
     ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginBody loginBody) {
         String jwt = userService.loginUser(loginBody);
         if(jwt == null){
@@ -43,5 +43,10 @@ public class AuthenticationController {
             loginResponse.setJwt(jwt);
             return ResponseEntity.ok(loginResponse);
         }
+    }
+
+    @GetMapping("/get/me")
+    public LocalUser getLoggedInUserProfile(@AuthenticationPrincipal LocalUser user) {
+        return user;
     }
 }

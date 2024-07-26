@@ -1,5 +1,6 @@
 package com.pokemon_team_builder.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class LocalUser {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
 

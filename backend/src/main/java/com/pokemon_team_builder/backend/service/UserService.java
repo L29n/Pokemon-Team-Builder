@@ -4,7 +4,7 @@ import com.pokemon_team_builder.backend.api.model.LoginBody;
 import com.pokemon_team_builder.backend.api.model.RegistrationBody;
 import com.pokemon_team_builder.backend.exception.UserAlreadyExistsException;
 import com.pokemon_team_builder.backend.model.LocalUser;
-import com.pokemon_team_builder.backend.model.dao.LocalUserDAO;
+import com.pokemon_team_builder.backend.model.repository.LocalUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,12 +12,12 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private LocalUserDAO localUserDAO;
+    private LocalUserRepository localUserDAO;
     private EncryptionService encryptionService;
     private JWTService jwtService;
 
-    public UserService(LocalUserDAO localUserDAO, EncryptionService encryptionService, JWTService jwtService) {
-        this.localUserDAO = localUserDAO;
+    public UserService(LocalUserRepository localUserRepository, EncryptionService encryptionService, JWTService jwtService) {
+        this.localUserDAO = localUserRepository;
         this.encryptionService = encryptionService;
         this.jwtService = jwtService;
     }
