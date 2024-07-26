@@ -1,0 +1,8 @@
+#resources: https://github.com/docker/compose?tab=readme-ov-file & https://stackoverflow.com/questions/42567475/docker-compose-check-if-mysql-connection-is-ready
+
+# version: '3.8'
+
+# services:
+#   db:
+#     image: mysql:latest
+
