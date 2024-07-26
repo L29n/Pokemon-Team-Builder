@@ -1,4 +1,4 @@
-package com.pokemon_team_builder.backend.controller;
+package com.pokemon_team_builder.backend.Controller;
 
 
 import org.springframework.web.bind.annotation.GetMapping;
