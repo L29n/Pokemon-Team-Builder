@@ -1,4 +1,5 @@
 import React from 'react';
+import Requests from '../api/Requests.js'
 
 class LoginPage extends React.Component {
 
@@ -10,12 +11,19 @@ class LoginPage extends React.Component {
         }
     }
 
-    collectUserInfo = () => {
+    requests = new Requests();
+
+
+    collectUserInfo = async () => {
         this.state.username = document.getElementById("username").value;
         this.state.password = document.getElementById("password").value;
 
         console.log(this.state.username);
         console.log(this.state.password);
+
+        const login_status_json = await this.requests.login_request(this.state.username, this.state.password);
+        console.log(login_status_json);
+
     }
 
     render() {

@@ -1,0 +1,32 @@
+
+
+class Requests {
+
+    // Post Requests
+
+    // Login Post
+    async login_request(username, password) {
+        try{
+            const response = await fetch('http://localhost:8080/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+            if(!response.ok) {
+                throw new Error(`HTTP error. Status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data; // Return the parsed JSON data
+        }
+        catch(error) {
+            console.error(error);
+            return { success: false, error: error.message };
+        }
+    }
+
+
+}
+
+export default Requests;
