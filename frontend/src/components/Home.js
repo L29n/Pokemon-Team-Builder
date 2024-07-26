@@ -27,15 +27,17 @@ class Home extends React.Component {
 
     render() {
         return(
-            <div>
-                <input type="text" id="pokemonName" placeholder="Enter Pokemon name"/>
-                <button
-                    onClick={() => this.fetchPokemon()}
-                >
-                    {this.props.name}
-                </button>
-                {this.state.sprite && <img src={this.state.sprite} alt="Pokemon Sprite"/>}
-            </div>
+            <>
+                <div>
+                    <input type="text" id="pokemonName" placeholder="Enter Pokemon name"/>
+                    <button
+                        onClick={() => this.fetchPokemon()}
+                    >
+                        Find Pokemon
+                    </button>
+                    {this.state.sprite && <img src={this.state.sprite} alt="Pokemon Sprite"/>}
+                </div>
+            </>
         );
     }
 }
