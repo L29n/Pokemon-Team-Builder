@@ -1,0 +1,3 @@
+com\pokemon_team_builder\backend\BackendApplication.class
+com\pokemon_team_builder\backend\controller\HelloWorldController.class
+com\pokemon_team_builder\backend\TestTable.class
