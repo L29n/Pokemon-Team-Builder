@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class ProtectedPage extends Component {
     render() {
         const { user } = this.props;
-        console.log(user.USERNAME);
+        console.log(user);
         return (
             <div>
                 <h2>Protected Page</h2>

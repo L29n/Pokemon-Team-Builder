@@ -4,15 +4,22 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class PokemonCollectionId implements Serializable {
-    private LocalUser localUser;
-    private Pokemon pokemon;
+    private long localUser;
+    private long pokemon;
+
+    public PokemonCollectionId() {}
+
+    public PokemonCollectionId(long localUser, long pokemon) {
+        this.localUser = localUser;
+        this.pokemon = pokemon;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PokemonCollectionId that = (PokemonCollectionId) o;
-        return Objects.equals(localUser, that.localUser) && Objects.equals(pokemon, that.pokemon);
+        return localUser == that.localUser && pokemon == that.pokemon;
     }
 
     @Override

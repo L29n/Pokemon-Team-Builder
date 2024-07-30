@@ -9,7 +9,8 @@ class RegisterPage extends React.Component {
             username: null,
             password: null,
             email: null,
-            password_match: true
+            password_match: true,
+            error: ''
         };
     }
 
@@ -37,7 +38,7 @@ class RegisterPage extends React.Component {
                 const register_status_json = await this.requests.register_request(this.state.username, this.state.password, this.state.email);
                 console.log(register_status_json);
             } else {
-                console.log("Passwords do not match.");
+                this.setState({ error: 'Passwords do not match.' });
             }
         });
     }
@@ -55,6 +56,7 @@ class RegisterPage extends React.Component {
                     <li><input type="text" id="email" placeholder="Enter your email address"/></li>
                     <li><button onClick={()=>{this.collectUserInfo()}}>Register</button> </li>
                 </ul>
+                {this.state.error && <p>{this.state.error}</p>}
             </>
         );
     }
