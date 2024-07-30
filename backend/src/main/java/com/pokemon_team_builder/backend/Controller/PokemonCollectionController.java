@@ -14,7 +14,7 @@ public class PokemonCollectionController {
     @Autowired
     private PokemonCollectionService pokemonCollectionService;
     @PostMapping("/api/post/PokemonCollection/addPokemon")
-    public ResponseEntity<PokemonCollection> postLocalUser(@RequestBody PokemonCollection pokemon){
+    public ResponseEntity<PokemonCollection> postPokemonCollection(@RequestBody PokemonCollection pokemon){
         try{
             PokemonCollection savedPokemonCollection = pokemonCollectionService.savePokemonToCollection(pokemon);
             return ResponseEntity.ok(savedPokemonCollection);
