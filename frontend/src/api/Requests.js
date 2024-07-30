@@ -40,6 +40,7 @@ class Requests {
                 throw new Error(`HTTP error. Status: ${response.status}`);
             }
             const data = await response.json();
+            console.log(data);
             return data;
         }
         catch(error) {
@@ -49,6 +50,27 @@ class Requests {
     }
 
 
+    async getProtectedResource() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('No token found');
+        }
+
+        const response = await fetch('http://localhost:8080/api/protected', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch protected resource');
+        }
+
+        const data = await response.json();
+        return data;
+    }
 }
+
 
 export default Requests;

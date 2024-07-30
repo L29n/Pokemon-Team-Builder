@@ -1,44 +1,50 @@
 import React from 'react';
-import Requests from '../api/Requests.js'
+import Requests from '../api/Requests.js';
 
 class LoginPage extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            username: null,
-            password: null
-        }
+            username: '',
+            password: '',
+            error: ''
+        };
+
+        this.collectUserInfo = this.collectUserInfo.bind(this);
     }
 
     requests = new Requests();
 
-
-    collectUserInfo = async () => {
+    async collectUserInfo() {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
 
-        this.setState({
-            username: username,
-            password: password
-        }, async () => {
-            // This callback function runs after the state has been updated
-            console.log(this.state.username);
-            console.log(this.state.password);
+        this.setState({ username, password });
 
-            const login_status_json = await this.requests.login_request(this.state.username, this.state.password);
+        try {
+            const login_status_json = await this.requests.login_request(username, password);
             console.log(login_status_json);
-        });
-
+            if (login_status_json.jwt) {
+                localStorage.setItem('token', login_status_json.jwt);
+                console.log("hi");
+                this.props.navigate('/protected');
+            } else {
+                this.setState({ error: 'Invalid login credentials' });
+            }
+        } catch (error) {
+            this.setState({ error: 'An error occurred during login' });
+        }
     }
 
     render() {
-        return(
+        return (
             <div>
                 <h1>Login Page</h1>
                 <input type="text" id="username" placeholder="Enter your username"/>
                 <input type="password" id="password" placeholder="Enter your password"/>
-                <button onClick={() => {this.collectUserInfo()}}>Login</button>
+                <button onClick={this.collectUserInfo}>Login</button>
+                {this.state.error && <p>{this.state.error}</p>}
             </div>
         );
     }

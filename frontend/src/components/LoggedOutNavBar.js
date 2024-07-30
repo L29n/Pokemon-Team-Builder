@@ -13,6 +13,7 @@ class NavBar extends React.Component {
                 <Link to="/"> Home </Link>
                 <Link to="/login"> Login </Link>
                 <Link to="/register"> Register </Link>
+                <Link to="/protected"> Protected </Link>
             </div>
         )
     }
