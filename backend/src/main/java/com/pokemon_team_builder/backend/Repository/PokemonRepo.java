@@ -8,4 +8,5 @@ import java.util.List;
 public interface PokemonRepo extends JpaRepository<Pokemon, Integer> {
    //Need to figure out what to search by
 //    List<Pokemon> findAllByKeyword(String keyword);
+    Pokemon findPokemonByName(String name);
 }

@@ -16,7 +16,7 @@ public class PokemonCollectionController {
     @PostMapping("/api/post/PokemonCollection/addPokemon")
     public ResponseEntity<PokemonCollection> postPokemonCollection(@RequestBody PokemonCollection pokemon){
         try{
-            PokemonCollection savedPokemonCollection = pokemonCollectionService.savePokemonToCollection(pokemon);
+            PokemonCollection savedPokemonCollection = pokemonCollectionService.addPokemonToCollection(pokemon);
             return ResponseEntity.ok(savedPokemonCollection);
         }catch(RuntimeException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
