@@ -32,11 +32,18 @@ class PokemonSearch extends Component {
     async addPokemon(){
         const{user, pokemonName} = this.state;
         console.log(user.username, pokemonName);
-        const newCollection = {
-            local_user_id: user.username,
-            pokemon_id: pokemonName
-        };
-        await postAPI(newCollection,"/PokemonCollection/addPokemon");
+        // const newCollection = {
+        //     local_user_id: user.username,
+        //     pokemon_id: pokemonName
+        // };
+        let pathStr = `/PokemonCollection/addPokemon/${user.username}/${pokemonName}`;
+        // let pokemonExists = await getAPI();
+            // console.log("Pokemon is already in your collection!");
+            let response = await postAPI(null,pathStr);
+            if(response == null){
+                alert(pokemonName + " has been added to your collection!");
+            }
+            // alert(pokemonName + " has been added to your collection!");
     }
     setUserInput(currentInput){
         this.setState({userInput:currentInput.target.value.toLowerCase()});
@@ -50,7 +57,7 @@ class PokemonSearch extends Component {
     componentDidMount(){
         //current testing
         const tempUser ={
-            username: "test1"
+            username: "testUser1"
         };
         localStorage.setItem("token", JSON.stringify(tempUser));
         //Real implementation

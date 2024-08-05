@@ -8,8 +8,10 @@ import com.pokemon_team_builder.backend.Repository.UserRepo;
 import com.pokemon_team_builder.backend.model.LocalUser;
 import com.pokemon_team_builder.backend.model.Pokemon;
 import com.pokemon_team_builder.backend.model.PokemonCollection;
+import com.pokemon_team_builder.backend.model.PokemonCollectionId;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,19 +25,37 @@ public class PokemonCollectionService {
     @Autowired
     private PokemonCollectionRepo pokemonCollectionRepo;
 
-    public PokemonCollection addPokemonToCollection(PokemonCollection pc) {
-        // Retrieve LocalUser and Pokemon entities
-        LocalUser localUser = localUserRepo.findLocalUserByUsername(pc.getLocalUser().getUsername());
+    public PokemonCollection addPokemonToCollection(String username, String pokemonName) {
+        try{
+            System.out.println(username);
+            System.out.println(pokemonName);
+            // Retrieve LocalUser and Pokemon entities
+            LocalUser localUser = localUserRepo.findLocalUserByUsername(username);
 //                .orElseThrow(() -> new EntityNotFoundException("LocalUser not found"));
-        Pokemon pokemon = pokemonRepo.findPokemonByName(pc.getPokemon().getName());
+            Pokemon pokemon = pokemonRepo.findPokemonByName(pokemonName);
 //                .orElseThrow(() -> new EntityNotFoundException("Pokemon not found"));
+            PokemonCollection pokemonCollectionCheckPoke = pokemonCollectionRepo.findPokemonCollectionByPokemonId(pokemon.getId());
 
-        // Create a new PokemonCollection entry
-        PokemonCollection pokemonCollection = new PokemonCollection();
-        pokemonCollection.setLocalUser(localUser);
-        pokemonCollection.setPokemon(pokemon);
+            if(pokemonCollectionCheckPoke!= null && pokemonCollectionCheckPoke.getLocalUser().getUsername().equals( username)){
+              System.out.println("pokemonExists");
+              return null;
+            }
+            // Create a new PokemonCollection entry
+            PokemonCollection pokemonCollection = new PokemonCollection();
+            pokemonCollection.setLocalUser(localUser);
+            pokemonCollection.setPokemon(pokemon);
 
-        // Save the PokemonCollection entry
-        return pokemonCollectionRepo.save(pokemonCollection);
+            // Save the PokemonCollection entry
+            System.out.println(localUser.getId());
+            System.out.println(pokemon.getId());
+            return pokemonCollectionRepo.save(pokemonCollection);
+        }
+        catch(Exception e){
+            System.out.println("issue in service");
+            throw new RuntimeException("Failed to save pokemonCollection: " + e.getMessage());
+        }
+
     }
+
+//    public PokemonCollection getPokemonById(Str)
 }

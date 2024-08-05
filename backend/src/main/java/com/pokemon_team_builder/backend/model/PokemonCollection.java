@@ -12,12 +12,12 @@ import lombok.Setter;
 public class PokemonCollection {
     @Id
     @ManyToOne(optional = false)
-    @JoinColumn(name = "local_user_id", nullable = false, unique = true)
+    @JoinColumn(name = "local_user_id", nullable = false)
     private LocalUser localUser;
 
     @Id
     @ManyToOne(optional = false)
-    @JoinColumn(name = "pokemon_id", nullable = false, unique = true)
+    @JoinColumn(name = "pokemon_id", nullable = false)
     private Pokemon pokemon;
 
 }
