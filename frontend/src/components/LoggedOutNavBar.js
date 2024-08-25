@@ -14,6 +14,7 @@ class NavBar extends React.Component {
                 <Link to="/login"> Login </Link>
                 <Link to="/register"> Register </Link>
                 <Link to="/protected"> Protected </Link>
+                <Link to="/pokemon-search"> Pokemon-Search </Link>
             </div>
         )
     }

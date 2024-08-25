@@ -1,5 +1,6 @@
 package com.pokemon_team_builder.backend.service;
 
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -43,5 +44,6 @@ public class EncryptionService {
     public boolean verifyPassword(String password, String hash) {
         return BCrypt.checkpw(password, hash);
     }
+
 
 }

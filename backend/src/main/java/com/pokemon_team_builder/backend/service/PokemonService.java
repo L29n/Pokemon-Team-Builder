@@ -11,13 +11,5 @@ public class PokemonService {
 
     @Autowired
     private PokemonRepository pokemonRepository;
-    //Need to modify this when we get to it
-//    public List<Pokemon> getPokemonByKeyword(String keyword){
-//        try {
-//            return pokemonRepo.findAllByKeyword(keyword);
-//        } catch (Exception e) {
-//            // Handle other unexpected exceptions
-//            throw new RuntimeException("Failed to save user: " + e.getMessage());
-//        }
-//    }
+
 }

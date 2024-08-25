@@ -1,11 +1,12 @@
 package com.pokemon_team_builder.backend.model.repository;
 
 import com.pokemon_team_builder.backend.model.Pokemon;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface PokemonRepository extends CrudRepository<Pokemon, Integer> {
-    //Need to figure out what to search by
-//    List<Pokemon> findAllByKeyword(String keyword);
+@Repository
+public interface PokemonRepository extends JpaRepository<Pokemon, Integer> {
+    Optional<Pokemon> findPokemonByName(String name);
 }
