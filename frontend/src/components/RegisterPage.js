@@ -1,65 +1,46 @@
-import React from 'react';
-import Requests from '../api/Requests.js'
+import React, { useState } from 'react';
+import Requests from '../api/Requests.js';
 
-class RegisterPage extends React.Component {
+const RegisterPage = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [email, setEmail] = useState('');
+    const [passwordMatch, setPasswordMatch] = useState(true);
+    const [error, setError] = useState('');
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: null,
-            password: null,
-            email: null,
-            password_match: true,
-            error: ''
-        };
-    }
+    const requests = new Requests();
 
-    requests = new Requests();
+    const collectUserInfo = async () => {
+        const passwordMatch = password === passwordConfirm;
 
-    collectUserInfo = async () => {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-        const passwordConfirm = document.getElementById("password_confirm").value;
-        const email = document.getElementById("email").value.toLowerCase();
-        const password_match = password === passwordConfirm;
+        setPasswordMatch(passwordMatch);
 
-        this.setState({
-            username: username,
-            password: password,
-            password_match: password_match,
-            email: email
-        }, async () => {
-            console.log(this.state.username);
-            console.log(this.state.password);
-            console.log(this.state.password_match);
-            console.log(this.state.email);
-
-            if (this.state.password_match) {
-                const register_status_json = await this.requests.register_request(this.state.username, this.state.password, this.state.email);
-                console.log(register_status_json);
-            } else {
-                this.setState({ error: 'Passwords do not match.' });
+        if (passwordMatch) {
+            try {
+                const registerStatusJson = await requests.register_request(username, password, email);
+                console.log(registerStatusJson);
+            } catch (error) {
+                setError('An error occurred during registration');
             }
-        });
-    }
+        } else {
+            setError('Passwords do not match.');
+        }
+    };
 
-
-
-    render() {
-        return(
-            <>
-                <h1>Register Page</h1>
-                <ul>
-                    <li><input type="text" id="username" placeholder="Enter your username"/></li>
-                    <li><input type="password" id="password" placeholder="Enter your password"/></li>
-                    <li><input type="password" id="password_confirm" placeholder="Enter your password again"/></li>
-                    <li><input type="text" id="email" placeholder="Enter your email address"/></li>
-                    <li><button onClick={()=>{this.collectUserInfo()}}>Register</button> </li>
-                </ul>
-                {this.state.error && <p>{this.state.error}</p>}
-            </>
-        );
-    }
-}
+    return (
+        <>
+            <h1>Register Page</h1>
+            <ul>
+                <li><input type="text" placeholder="Enter your username" value={username} onChange={(e) => setUsername(e.target.value)} /></li>
+                <li><input type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} /></li>
+                <li><input type="password" placeholder="Enter your password again" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} /></li>
+                <li><input type="text" placeholder="Enter your email address" value={email} onChange={(e) => setEmail(e.target.value)} /></li>
+                <li><button onClick={collectUserInfo}>Register</button></li>
+            </ul>
+            {error && <p>{error}</p>}
+        </>
+    );
+};
 
 export default RegisterPage;

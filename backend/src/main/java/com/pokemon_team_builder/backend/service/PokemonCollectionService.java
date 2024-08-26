@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @Service
 public class PokemonCollectionService {
-
     @Autowired
     private LocalUserRepository localUserRepo;
 
@@ -24,40 +23,39 @@ public class PokemonCollectionService {
     @Autowired
     private PokemonCollectionRepository pokemonCollectionRepo;
 
-    public PokemonCollection addPokemonToCollection(String username, String pokemonName) {
-        try{
-            // Retrieve LocalUser and Pokemon entities
-            Optional<LocalUser> localUser = localUserRepo.findByUsernameIgnoreCase(username);
-            Optional<Pokemon> pokemon = pokemonRepo.findPokemonByName(pokemonName);
+    public PokemonCollection addPokemonToCollection(String username, String pokemonName) throws PokemonAlreadyInCollectionException {
+        // Retrieve LocalUser and Pokemon entities
+        Optional<LocalUser> localUserOpt = localUserRepo.findByUsernameIgnoreCase(username);
+        Optional<Pokemon> pokemonOpt = pokemonRepo.findPokemonByName(pokemonName);
 
-            if(localUser.isEmpty()){
-                throw new Error("User not found");
-            }
+        if (localUserOpt.isEmpty()) {
+            throw new IllegalArgumentException("User not found");
+        }
 
-            if(pokemon.isEmpty()){
-                throw new Error("Pokemon not found");
-            }
+        if (pokemonOpt.isEmpty()) {
+            throw new IllegalArgumentException("Pokemon not found");
+        }
 
-            Optional<PokemonCollection> pokemonCollectionCheckEntry = pokemonCollectionRepo.findPokemonCollectionByPokemonId(pokemon.get().getId());
+        LocalUser localUser = localUserOpt.get();
+        Pokemon pokemon = pokemonOpt.get();
 
-            if(pokemonCollectionCheckEntry.isPresent() && pokemonCollectionCheckEntry.get().getLocalUser().getUsername().equals(username)){
-                System.out.println("Pokemon already exists in collection");
-                return null; // conflict handle with error 409
-            }
-            // Create a new PokemonCollection entry
-            PokemonCollection pokemonCollection = new PokemonCollection();
-            pokemonCollection.setLocalUser(localUser.get());
-            pokemonCollection.setPokemon(pokemon.get());
+        // Check if the Pokemon is already in the user's collection
+        Optional<PokemonCollection> existingEntry = pokemonCollectionRepo.findByLocalUserAndPokemon(localUser, pokemon);
 
-            // Save the PokemonCollection entry
-            System.out.println(localUser.get().getId());
-            System.out.println(pokemon.get().getId());
+        if (existingEntry.isPresent()) {
+            throw new PokemonAlreadyInCollectionException("Pokemon already exists in collection");
+        }
+
+        // Create a new PokemonCollection entry
+        PokemonCollection pokemonCollection = new PokemonCollection();
+        pokemonCollection.setLocalUser(localUser);
+        pokemonCollection.setPokemon(pokemon);
+
+        // Save the PokemonCollection entry
+        try {
             return pokemonCollectionRepo.save(pokemonCollection);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save PokemonCollection: " + e.getMessage());
         }
-        catch(Exception e){
-            System.out.println("issue in service");
-            throw new RuntimeException("Failed to save pokemonCollection: " + e.getMessage());
-        }
-
     }
 }

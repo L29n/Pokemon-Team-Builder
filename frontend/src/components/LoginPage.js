@@ -1,53 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Requests from '../api/Requests.js';
+import { useNavigate } from 'react-router-dom';
 
-class LoginPage extends React.Component {
+const LoginPage = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-            error: ''
-        };
+    // Use useNavigate hook to programmatically navigate
+    const navigate = useNavigate();
+    const requests = new Requests();
 
-        this.collectUserInfo = this.collectUserInfo.bind(this);
-    }
-
-    requests = new Requests();
-
-    async collectUserInfo() {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-
-        this.setState({ username, password });
-
+    const collectUserInfo = async () => {
         try {
-            const login_status_json = await this.requests.login_request(username, password);
+            const login_status_json = await requests.login_request(username, password);
             console.log(login_status_json);
             if (login_status_json.jwt) {
                 localStorage.setItem('token', login_status_json.jwt);
                 console.log("hi");
-                this.props.navigate('/protected');
+                navigate('/protected'); // Navigate to the protected route
             } else {
-                this.setState({ error: 'Invalid login credentials' });
+                setError('Invalid login credentials');
             }
         } catch (error) {
-            this.setState({ error: 'An error occurred during login' });
+            setError('An error occurred during login');
         }
-    }
+    };
 
-    render() {
-        return (
-            <div>
-                <h1>Login Page</h1>
-                <input type="text" id="username" placeholder="Enter your username"/>
-                <input type="password" id="password" placeholder="Enter your password"/>
-                <button onClick={this.collectUserInfo}>Login</button>
-                {this.state.error && <p>{this.state.error}</p>}
-            </div>
-        );
-    }
-}
+    return (
+       <div>
+            <h1>Login Page</h1>
+            <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter your username"
+            />
+            <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+            />
+            <button onClick={collectUserInfo}>Login</button>
+            {error && <p>{error}</p>}
+        </div>
+    );
+};
 
 export default LoginPage;

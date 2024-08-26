@@ -26,7 +26,7 @@ public class PokemonCollectionController {
         try{
             PokemonCollection savedPokemonCollection = pokemonCollectionService.addPokemonToCollection(username, pokemonName);
             if(savedPokemonCollection == null){
-                throw new PokemonAlreadyInCollectionException();
+                throw new PokemonAlreadyInCollectionException("Pokemon already exists in collection");
             }
             return ResponseEntity.ok(savedPokemonCollection);
         }catch(PokemonAlreadyInCollectionException e){

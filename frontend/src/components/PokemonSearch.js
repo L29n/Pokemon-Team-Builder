@@ -1,86 +1,69 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { pokeAPI } from '../api/pokeAPI.js';
 import { postAPI } from '../api/postAPI.js';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // Updated import for jwt-decode
 
-class PokemonSearch extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            user: jwtDecode(localStorage.getItem('token')),
-            pokemonName: null,
-            userInput: null,
-            sprite: null
+const PokemonSearch = () => {
+    const [user, setUser] = useState(null);
+    const [pokemonName, setPokemonName] = useState(null);
+    const [userInput, setUserInput] = useState('');
+    const [sprite, setSprite] = useState(null);
+
+    useEffect(() => {
+        // Decode the token and set the user state on component mount
+        const token = localStorage.getItem('token');
+        if (token) {
+            setUser(jwtDecode(token));
         }
-        this.findPokemon = this.findPokemon.bind(this);
-        this.setUserInput = this.setUserInput.bind(this);
-        this.addPokemon = this.addPokemon.bind(this);
-        this.clearPokemon = this.clearPokemon.bind(this);
-    }
-    clearPokemon(){
-        this.setState({sprite: null});
-        const inputElement = document.getElementById("pokemonName");
-        if (inputElement) {
-            inputElement.value = '';
+    }, []);
+
+    const clearPokemon = useCallback(() => {
+        setSprite(null);
+        setUserInput('');
+    }, []);
+
+    const addPokemon = useCallback(async () => {
+        if (user && pokemonName) {
+            const pathStr = `/PokemonCollection/addPokemon/${user.USERNAME}/${pokemonName}`;
+            const response = await postAPI(null, pathStr);
+            if (response !== null) {
+                alert(`${pokemonName} has been added to your collection!`);
+            } else {
+                alert("Error!");
+            }
         }
-        this.setState({ userInput: null });
-    }
-    async addPokemon(){
-        const{user, pokemonName} = this.state;
-        console.log(user.USERNAME, pokemonName);
-        let pathStr = `/PokemonCollection/addPokemon/${user.USERNAME}/${pokemonName}`;
-        let response = await postAPI(null,pathStr);
-        if(response !== null){
-            alert(pokemonName + " has been added to your collection!");
-        }else{
-            alert("Error!");
+    }, [user, pokemonName]);
+
+    const findPokemon = useCallback(async () => {
+        if (userInput) {
+            const data = await pokeAPI(userInput);
+            setPokemonName(data.name);
+            setSprite(data.sprites.front_default);
         }
-    }
-    setUserInput(currentInput){
-        this.setState({userInput:currentInput.target.value.toLowerCase()});
-    }
-    async findPokemon(){
-        const{userInput} = this.state;
-        const data = await pokeAPI(userInput);
-        this.setState({pokemonName: `${data.name}`});
-        this.setState({sprite: `${data.sprites.front_default}`});
-    }
-    componentDidMount(){
-        console.log(jwtDecode(localStorage.getItem("token")));
-    }
-    render() {
-        const{user,sprite} = this.state;
-        return (
-            <div>
-                {sprite == null?(
-                    <div>
-                        <h1> {user.USERNAME}'s Pokemon Search </h1>
-                        <input type="text" id="pokemonName" placeholder="Enter Pokemon name" onChange={this.setUserInput}/>
-                            <button onClick={this.findPokemon}>
-                                Find Pokemon
-                            </button>
-                        {this.state.sprite && <img src={this.state.sprite} alt="Pokemon Sprite"/>}
-                        <br/>
-                        <br/>
-                    </div>
-                )
-                :(
-                    <div>
-                        <h1> {user.USERNAME}'s Pokemon Search </h1>
-                        <input type="text" id="pokemonName" placeholder="Enter Pokemon name" onChange={this.setUserInput}/>
-                            <button onClick={this.findPokemon}>
-                                Find Pokemon
-                            </button>
-                        {this.state.sprite && <img src={sprite} alt="Pokemon Sprite"/>}
-                        <br/>
-                        <br/>
-                        <button onClick={this.addPokemon}> Add Pokemon to Collection</button>
-                        <button onClick = {this.clearPokemon}>Clear</button>
-                    </div>
-                )}
-            </div>
-        );
-    }
-}
+    }, [userInput]);
+
+    return (
+        <div>
+            <h1>{user?.USERNAME}'s Pokemon Search</h1>
+            <input
+            type="text"
+            id="pokemonName"
+            placeholder="Enter Pokemon name"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value.toLowerCase())}
+            />
+            <button onClick={findPokemon}>Find Pokemon</button>
+            {sprite && <img src={sprite} alt="Pokemon Sprite" />}
+            <br />
+            <br />
+            {sprite && (
+                <>
+                    <button onClick={addPokemon}>Add Pokemon to Collection</button>
+                    <button onClick={clearPokemon}>Clear</button>
+                </>
+            )}
+        </div>
+    );
+};
 
 export default PokemonSearch;

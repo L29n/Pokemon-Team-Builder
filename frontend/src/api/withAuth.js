@@ -1,51 +1,45 @@
-import React, { Component } from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
-export default function withAuth(WrappedComponent) {
-    return class extends Component {
-        constructor(props) {
-            super(props);
+const withAuth = (WrappedComponent) => {
+    const AuthHOC = (props) => {
+        const [isAuthenticated, setIsAuthenticated] = useState(false);
+        const [user, setUser] = useState(null);
+        const [loading, setLoading] = useState(true);
+        const navigate = useNavigate();
 
-            this.state = {
-                isAuthenticated: false,
-                user: null,
-                loading: true,
-            };
-        }
-
-        componentDidMount() {
+        useEffect(() => {
             const token = localStorage.getItem('token');
             if (token) {
                 try {
                     const decoded = jwtDecode(token);
                     if (decoded.exp * 1000 > Date.now()) {
-                        this.setState({ isAuthenticated: true, user: decoded, loading: false });
+                        setIsAuthenticated(true);
+                        setUser(decoded);
                     } else {
                         localStorage.removeItem('token');
-                        this.setState({ loading: false });
                     }
                 } catch (err) {
                     localStorage.removeItem('token');
-                    this.setState({ loading: false });
                 }
-            } else {
-                this.setState({ loading: false });
             }
-        }
+            setLoading(false);
+        }, []);
 
-        render() {
-            const { isAuthenticated, user, loading } = this.state;
-
-            if (loading) {
-                return <div>Loading...</div>;
-            }
-
-            if (!isAuthenticated) {
-                return <Navigate to="/login" />;
-            }
-
-            return <WrappedComponent {...this.props} user={user} />;
-        }
-    };
+        if (loading) {
+        return <div>Loading...</div>;
 }
+
+if (!isAuthenticated) {
+navigate('/login');
+return null; // Return null to avoid rendering the wrapped component
+}
+
+return <WrappedComponent {...props} user={user} />;
+};
+
+return AuthHOC;
+};
+
+export default withAuth;
