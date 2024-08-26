@@ -25,9 +25,11 @@ const PokemonSearch = () => {
     const addPokemon = useCallback(async () => {
         if (user && pokemonName) {
             const pathStr = `/PokemonCollection/addPokemon/${user.USERNAME}/${pokemonName}`;
-            const response = await postAPI(null, pathStr);
-            if (response !== null) {
+            const status = await postAPI(null, pathStr);
+            if (status === 200) {
                 alert(`${pokemonName} has been added to your collection!`);
+            } else if (status === 409){
+                alert(`${pokemonName} is already in your collection!`);
             } else {
                 alert("Error!");
             }

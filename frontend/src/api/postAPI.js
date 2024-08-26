@@ -15,18 +15,19 @@ export const postAPI = (data_object, path) => {
     return fetch(url, options)
         .then((response) => {
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            console.error(`HTTP error! status: ${response.status}`);
+            return response.status;
         }
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.indexOf("application/json") !== -1) {
-            return response.json();
+            return response.status;
         } else {
             console.log("Response is not JSON");
-            return null;
+            return -1;
         }
     })
-        .catch((error) => {
-        console.error('Error:', error);
-        return null;
-    });
+    //     .catch((error) => {
+    //     console.error('Error:', error);
+    //     return null;
+    // });
 };
